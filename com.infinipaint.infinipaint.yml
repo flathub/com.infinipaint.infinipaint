@@ -22,6 +22,13 @@ cleanup:
   - /bin/proto*
   - /lib/*.a
 modules:
+  - name: zstd
+    buildsystem: cmake-ninja
+    subdir: build/cmake
+    sources:
+      - type: git
+        tag: v1.5.7
+        url: https://github.com/facebook/zstd.git
   - name: libdatachannel
     buildsystem: cmake-ninja
     config-opts:
@@ -42,18 +49,18 @@ modules:
   - name: SDL3
     buildsystem: cmake-ninja
     config-opts:
-        - -DCMAKE_BUILD_TYPE=Release
-        - -DSDL_SHARED=ON
-        - -DSDL_STATIC=OFF
-        - -DSDL_TEST_LIBRARY=OFF
-        - -DSDL_TESTS=OFF
-        - -DSDL_DISABLE_INSTALL_DOCS=OFF
-        - -DSDL_INSTALL_TESTS=OFF
-        - -DSDL_WAYLAND=OFF
-        - -DSDL_X11=ON
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DSDL_SHARED=ON
+      - -DSDL_STATIC=OFF
+      - -DSDL_TEST_LIBRARY=OFF
+      - -DSDL_TESTS=OFF
+      - -DSDL_DISABLE_INSTALL_DOCS=OFF
+      - -DSDL_INSTALL_TESTS=OFF
+      - -DSDL_WAYLAND=OFF
+      - -DSDL_X11=ON
     sources:
       - type: git
-        tag: release-3.2.12
+        tag: release-3.2.20
         url: https://github.com/libsdl-org/SDL.git
   - name: Skia
     buildsystem: simple
@@ -73,22 +80,55 @@ modules:
         url: https://infinipaint.com/downloads/skiabuilds/skia-aefbd940-linux-x86_84-flatpak-24.08.7z
         sha256: bd1480bac46f5677913426760358b97bdac6fdfb5b235fa340a71e1f7e6ded8a
         dest: 'out/Static'
-  - name: infinipaint
+        only-arches:
+          - x86_64
+      - type: archive
+        url: https://infinipaint.com/downloads/skiabuilds/skia-aefbd940-linux-aarch64-flatpak-24.08.7z
+        sha256: 798d87e9325e61f42914b36117bfea27aa9624bbc00910f986c0a50a55ff1ba7
+        dest: 'out/Static'
+        only-arches:
+          - aarch64
+  - name: infinipaint-x86_64
     buildsystem: cmake-ninja
     builddir: true
+    only-arches:
+      - x86_64
     config-opts:
-        - -DLINK_SKIA_MANUALLY=ON
-        - -DSKIA_INCLUDE=/app/Skia
-        - -DSKIA_LIB=/app/Skia/out/Static/libskia.a
-        - -DSKIA_SVG_LIB=/app/Skia/out/Static/libsvg.a
-        - -DSKIA_RESOURCES_LIB=/app/Skia/out/Static/libskresources.a
-        - -DSKIA_SHAPER_LIB=/app/Skia/out/Static/libskshaper.a
-        - -DSKIA_UNICODE_ICU_LIB=/app/Skia/out/Static/libskunicode_core.a
-        - -DSKIA_UNICODE_CORE_LIB=/app/Skia/out/Static/libskunicode_icu.a
-        - -DSKIA_PARAGRAPH_LIB=/app/Skia/out/Static/libskparagraph.a
-        - -DCMAKE_BUILD_TYPE=Release
-        - -DTBB_NOT_ONETBB=ON
+      - -DLINK_SKIA_MANUALLY=ON
+      - -DSKIA_INCLUDE=/app/Skia
+      - -DSKIA_LIB=/app/Skia/out/Static/libskia.a
+      - -DSKIA_SVG_LIB=/app/Skia/out/Static/libsvg.a
+      - -DSKIA_RESOURCES_LIB=/app/Skia/out/Static/libskresources.a
+      - -DSKIA_SHAPER_LIB=/app/Skia/out/Static/libskshaper.a
+      - -DSKIA_UNICODE_ICU_LIB=/app/Skia/out/Static/libskunicode_core.a
+      - -DSKIA_UNICODE_CORE_LIB=/app/Skia/out/Static/libskunicode_icu.a
+      - -DSKIA_PARAGRAPH_LIB=/app/Skia/out/Static/libskparagraph.a
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DTBB_NOT_ONETBB=ON
+      - -DGRAPHICS_BACKEND=OpenGL3.3
     sources:
       - type: git
         url: https://github.com/ErrorAtLine0/infinipaint.git
-        tag: v0.0.4
+        tag: v0.1.0
+  - name: infinipaint-aarch64
+    buildsystem: cmake-ninja
+    builddir: true
+    only-arches:
+      - aarch64
+    config-opts:
+      - -DLINK_SKIA_MANUALLY=ON
+      - -DSKIA_INCLUDE=/app/Skia
+      - -DSKIA_LIB=/app/Skia/out/Static/libskia.a
+      - -DSKIA_SVG_LIB=/app/Skia/out/Static/libsvg.a
+      - -DSKIA_RESOURCES_LIB=/app/Skia/out/Static/libskresources.a
+      - -DSKIA_SHAPER_LIB=/app/Skia/out/Static/libskshaper.a
+      - -DSKIA_UNICODE_ICU_LIB=/app/Skia/out/Static/libskunicode_core.a
+      - -DSKIA_UNICODE_CORE_LIB=/app/Skia/out/Static/libskunicode_icu.a
+      - -DSKIA_PARAGRAPH_LIB=/app/Skia/out/Static/libskparagraph.a
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DTBB_NOT_ONETBB=ON
+      - -DGRAPHICS_BACKEND=OpenGLES3.0
+    sources:
+      - type: git
+        url: https://github.com/ErrorAtLine0/infinipaint.git
+        tag: v0.1.0
