@@ -1,6 +1,6 @@
 id: com.infinipaint.infinipaint
 runtime: org.freedesktop.Platform
-runtime-version: '24.08'
+runtime-version: '25.08'
 sdk: org.freedesktop.Sdk
 command: infinipaint
 finish-args:
@@ -17,11 +17,26 @@ cleanup:
   - /include
   - /lib/pkgconfig
   - /lib/cmake
-  - /lib/cmake
   - /lib/libupb.a
   - /bin/proto*
   - /lib/*.a
+  - /lib/libicui18n*
+  - /lib/libicudata*
+  - /bin/zstd*
+  - /bin/unzstd
 modules:
+  - name: ICU
+    buildsystem: simple
+    subdir: source
+    build-commands:
+      - chmod +x runConfigureICU configure install-sh
+      - ./runConfigureICU Linux --prefix=/app --disable-icu-config --disable-icuio --disable-extras --disable-tools --disable-tests --disable-samples --disable-layoutex --disable-layout
+      - make -j$(nproc)
+      - make install
+    sources:
+      - type: archive
+        url: https://github.com/unicode-org/icu/releases/download/release-77-1/icu4c-77_1-src.tgz
+        sha256: 588e431f77327c39031ffbb8843c0e3bc122c211374485fa87dc5f3faff24061
   - name: zstd
     buildsystem: cmake-ninja
     subdir: build/cmake
@@ -60,7 +75,7 @@ modules:
       - -DSDL_X11=ON
     sources:
       - type: git
-        tag: release-3.2.20
+        tag: release-3.2.26
         url: https://github.com/libsdl-org/SDL.git
   - name: Skia
     buildsystem: simple
@@ -74,17 +89,17 @@ modules:
       - '*'
     sources:
       - type: archive
-        url: https://github.com/google/skia/archive/aefbd9403c1b3032ad4cd0281ef312ed262c7125.zip
-        sha256: e10c67a96828b9f36364e2459cdee3e3b381a3875ff78db2b30e7b6fe69509bb
+        url: https://github.com/google/skia/archive/da51f0d60ea2b14e845a823dc11b405dbeef42d8.zip
+        sha256: 1f5140d5908031d8cdd06429a633a1583b12fc43dc1c768374ed1e91ab9fa596
       - type: archive
-        url: https://infinipaint.com/downloads/skiabuilds/skia-aefbd940-linux-x86_84-flatpak-24.08.7z
-        sha256: bd1480bac46f5677913426760358b97bdac6fdfb5b235fa340a71e1f7e6ded8a
+        url: https://raw.githubusercontent.com/erroratline0/com.infinipaint.infinipaint/master/skiabuilds/skia-da51f0d6-x86_64-flatpak-25.08.7z
+        sha256: 7240e33fd63d8e495c6ba680842848294b2615364158a9233d20e725c9012623
         dest: 'out/Static'
         only-arches:
           - x86_64
       - type: archive
-        url: https://infinipaint.com/downloads/skiabuilds/skia-aefbd940-linux-aarch64-flatpak-24.08.7z
-        sha256: 798d87e9325e61f42914b36117bfea27aa9624bbc00910f986c0a50a55ff1ba7
+        url: https://raw.githubusercontent.com/erroratline0/com.infinipaint.infinipaint/master/skiabuilds/skia-da51f0d6-aarch64-flatpak-25.08.7z
+        sha256: f8fc58b4c3eb83cc48bb12faec2ae44b291cf94f78249512592fb9989c5b2e79
         dest: 'out/Static'
         only-arches:
           - aarch64
@@ -94,7 +109,7 @@ modules:
     only-arches:
       - x86_64
     config-opts:
-      - -DLINK_SKIA_MANUALLY=ON
+      - -DNO_CONAN_BUILD=ON
       - -DSKIA_INCLUDE=/app/Skia
       - -DSKIA_LIB=/app/Skia/out/Static/libskia.a
       - -DSKIA_SVG_LIB=/app/Skia/out/Static/libsvg.a
@@ -104,19 +119,18 @@ modules:
       - -DSKIA_UNICODE_CORE_LIB=/app/Skia/out/Static/libskunicode_icu.a
       - -DSKIA_PARAGRAPH_LIB=/app/Skia/out/Static/libskparagraph.a
       - -DCMAKE_BUILD_TYPE=Release
-      - -DTBB_NOT_ONETBB=ON
       - -DGRAPHICS_BACKEND=OpenGL3.3
     sources:
       - type: git
         url: https://github.com/ErrorAtLine0/infinipaint.git
-        tag: v0.2.1
+        tag: v0.3.0
   - name: infinipaint-aarch64
     buildsystem: cmake-ninja
     builddir: true
     only-arches:
       - aarch64
     config-opts:
-      - -DLINK_SKIA_MANUALLY=ON
+      - -DNO_CONAN_BUILD=ON
       - -DSKIA_INCLUDE=/app/Skia
       - -DSKIA_LIB=/app/Skia/out/Static/libskia.a
       - -DSKIA_SVG_LIB=/app/Skia/out/Static/libsvg.a
@@ -126,9 +140,8 @@ modules:
       - -DSKIA_UNICODE_CORE_LIB=/app/Skia/out/Static/libskunicode_icu.a
       - -DSKIA_PARAGRAPH_LIB=/app/Skia/out/Static/libskparagraph.a
       - -DCMAKE_BUILD_TYPE=Release
-      - -DTBB_NOT_ONETBB=ON
       - -DGRAPHICS_BACKEND=OpenGLES3.0
     sources:
       - type: git
         url: https://github.com/ErrorAtLine0/infinipaint.git
-        tag: v0.2.1
+        tag: v0.3.0
