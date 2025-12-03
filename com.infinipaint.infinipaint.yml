@@ -51,7 +51,7 @@ modules:
       - -DCMAKE_BUILD_TYPE=Release
     sources:
       - type: git
-        tag: v0.23.1
+        tag: v0.23.2
         url: https://github.com/paullouisageneau/libdatachannel.git
   - name: oneTBB
     buildsystem: cmake-ninja
@@ -123,7 +123,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/ErrorAtLine0/infinipaint.git
-        tag: v0.3.0
+        tag: v0.3.1
   - name: infinipaint-aarch64
     buildsystem: cmake-ninja
     builddir: true
@@ -144,4 +144,4 @@ modules:
     sources:
       - type: git
         url: https://github.com/ErrorAtLine0/infinipaint.git
-        tag: v0.3.0
+        tag: v0.3.1
