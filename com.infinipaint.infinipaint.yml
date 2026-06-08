@@ -107,6 +107,18 @@ modules:
         dest: 'out/Static'
         only-arches:
           - aarch64
+  - name: Clipper2
+    buildsystem: cmake-ninja
+    config-opts:
+        - -DCLIPPER2_UTILS=OFF
+        - -DCLIPPER2_EXAMPLES=OFF
+        - -DCLIPPER2_TESTS=OFF
+    subdir: CPP
+    sources:
+      - type: git
+        tag: Clipper2_2.0.1
+        commit: 21ebba05db8894f0c7217ad35ea518080f324946
+        url: https://github.com/AngusJohnson/Clipper2.git
   - name: infinipaint-x86_64
     buildsystem: cmake-ninja
     builddir: true
@@ -127,7 +139,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/ErrorAtLine0/infinipaint.git
-        commit: 9cd9263afab78f40036d40f6bbdc398ae0788dbc
+        tag: v0.6.0
+        commit: a71bd9814ec58ec7db0a0df95a4793e8c600d4e4
   - name: infinipaint-aarch64
     buildsystem: cmake-ninja
     builddir: true
@@ -148,4 +161,5 @@ modules:
     sources:
       - type: git
         url: https://github.com/ErrorAtLine0/infinipaint.git
-        commit: 9cd9263afab78f40036d40f6bbdc398ae0788dbc
+        tag: v0.6.0
+        commit: a71bd9814ec58ec7db0a0df95a4793e8c600d4e4
