@@ -139,8 +139,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/ErrorAtLine0/infinipaint.git
-        tag: v0.6.0
-        commit: a71bd9814ec58ec7db0a0df95a4793e8c600d4e4
+        tag: v0.6.1
+        commit: bcadd5d68f94c38cfb29d5f27c2f65e9e02ba62f
   - name: infinipaint-aarch64
     buildsystem: cmake-ninja
     builddir: true
@@ -161,5 +161,5 @@ modules:
     sources:
       - type: git
         url: https://github.com/ErrorAtLine0/infinipaint.git
-        tag: v0.6.0
-        commit: a71bd9814ec58ec7db0a0df95a4793e8c600d4e4
+        tag: v0.6.1
+        commit: bcadd5d68f94c38cfb29d5f27c2f65e9e02ba62f
