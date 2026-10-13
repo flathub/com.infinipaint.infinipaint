@@ -5,8 +5,9 @@ sdk: org.freedesktop.Sdk
 command: infinipaint
 finish-args:
   - --share=ipc
-  - --socket=x11
-  - --device=all
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --device=dri
   - --share=network
   - --filesystem=xdg-desktop
   - --filesystem=xdg-documents
@@ -21,7 +22,7 @@ cleanup:
   - /bin/proto*
   - /lib/*.a
   - /lib/libicui18n*
-  - /lib/libicudata*
+  #- /lib/libicudata* # Should just be a stubfile, check the size of the library (should be small, doesn't actually contain data)
   - /bin/zstd*
   - /bin/unzstd
 modules:
@@ -64,23 +65,6 @@ modules:
         tag: v2022.0.0
         commit: 0c0ff192a2304e114bc9e6557582dfba101360ff
         url: https://github.com/uxlfoundation/oneTBB.git
-  - name: SDL3
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DSDL_SHARED=ON
-      - -DSDL_STATIC=OFF
-      - -DSDL_TEST_LIBRARY=OFF
-      - -DSDL_TESTS=OFF
-      - -DSDL_DISABLE_INSTALL_DOCS=OFF
-      - -DSDL_INSTALL_TESTS=OFF
-      - -DSDL_WAYLAND=OFF
-      - -DSDL_X11=ON
-    sources:
-      - type: git
-        tag: release-3.4.8
-        commit: d9d5536704d585616d4db3c8ba3c4ff6fc2757e1
-        url: https://github.com/libsdl-org/SDL.git
   - name: Skia
     buildsystem: simple
     build-commands:
@@ -135,12 +119,12 @@ modules:
       - -DSKIA_UNICODE_CORE_LIB=/app/Skia/out/Static/libskunicode_icu.a
       - -DSKIA_PARAGRAPH_LIB=/app/Skia/out/Static/libskparagraph.a
       - -DCMAKE_BUILD_TYPE=Release
+      - -DLINUX_ADD_VIDEO_DRIVER_OPTION=OFF
       - -DGRAPHICS_BACKEND=OpenGL3.3
     sources:
       - type: git
         url: https://github.com/ErrorAtLine0/infinipaint.git
-        tag: v0.6.1
-        commit: bcadd5d68f94c38cfb29d5f27c2f65e9e02ba62f
+        commit: d48c9aaf9cb78b95299be5a9d148c3d2f29f091b
   - name: infinipaint-aarch64
     buildsystem: cmake-ninja
     builddir: true
@@ -157,9 +141,9 @@ modules:
       - -DSKIA_UNICODE_CORE_LIB=/app/Skia/out/Static/libskunicode_icu.a
       - -DSKIA_PARAGRAPH_LIB=/app/Skia/out/Static/libskparagraph.a
       - -DCMAKE_BUILD_TYPE=Release
+      - -DLINUX_ADD_VIDEO_DRIVER_OPTION=OFF
       - -DGRAPHICS_BACKEND=OpenGLES3.0
     sources:
       - type: git
         url: https://github.com/ErrorAtLine0/infinipaint.git
-        tag: v0.6.1
-        commit: bcadd5d68f94c38cfb29d5f27c2f65e9e02ba62f
+        commit: d48c9aaf9cb78b95299be5a9d148c3d2f29f091b
